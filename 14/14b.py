@@ -41,7 +41,10 @@ def search(start_i, start_j, grid):
     return area
 
 i = 0
-while True:
+global_min_grid = None
+min_safety = float("inf")
+min_second = 0
+for i in range(100000):
     grid = [["." for x in range(m)] for y in range(n)]
     for robot in robots:
         robot[0] = (robot[0] + robot[2] + m) % m
@@ -49,8 +52,26 @@ while True:
         grid[robot[1]][robot[0]] = "#"
     max_bunch = max(search(robot[1], robot[0], grid) for robot in robots)
     i += 1
-    print(f"Second {i} -> {max_bunch}")
-    for l in grid:
-        print("".join(l))
-    if max_bunch >= 20:
-        time.sleep(2)
+    tr, tl, bl, br = 0, 0, 0, 0
+    for robot in robots:
+        if robot[0] < 50 and robot[1] < 51:
+            tr += 1
+        elif robot[0] < 50 and robot[1] > 51:
+            tl += 1
+        elif robot[0] > 50 and robot[1] < 51:
+            bl += 1
+        elif robot[0] > 50 and robot[1] > 51:
+            br += 1
+    safety_score = tr * tl * bl * br
+    if i % 10000 == 0:
+        print(f"Second {i}")
+    if safety_score < min_safety:
+        min_safety = safety_score
+        min_second = i
+        global_min_grid = grid
+    #if max_bunch >= 20:
+    #    time.sleep(2)
+
+print(f"Second {min_second} -> {min_safety}")
+for l in global_min_grid:
+    print("".join(l))
