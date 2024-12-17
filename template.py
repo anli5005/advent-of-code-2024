@@ -3,6 +3,7 @@ import re
 from collections import *
 from itertools import *
 from heapq import *
+from dataclasses import *
 import math
 
 def count(it):
