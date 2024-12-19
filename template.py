@@ -4,6 +4,7 @@ from collections import *
 from itertools import *
 from heapq import *
 from dataclasses import *
+import functools
 import math
 
 def count(it):
